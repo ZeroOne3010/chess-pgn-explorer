@@ -1,0 +1,152 @@
+<meta charset="UTF-8">
+<html>
+<head>
+  <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22256%22 height=%22256%22 viewBox=%220 0 100 100%22><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2290%22>♟️</text></svg>"/>
+  <title>Chess analyzer</title>
+  <script src="/script.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      setMoves({{{allPossibleMoves}}});
+    };
+  </script>
+  <style type="text/css">
+        table.stats td, table.stats th {
+            border: 1px solid #eeeeee;
+            padding: 8px 1em;
+        }
+
+        table.stats {
+            font-family: sans-serif;
+            border-collapse: collapse;
+        }
+
+        table.stats th {
+            background-color: #ccc;
+        }
+
+        table.stats tr:nth-child(even) {
+            background-color: #eee;
+        }
+
+        table.chessboard {
+            background-color: #feffcb;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 35px;
+            text-align: center;
+            vertical-align: middle;
+            margin-top: 0.5em;
+            margin-bottom: 1em;
+        }
+
+        table.chessboard tr:nth-child(odd) td:nth-child(even),
+        table.chessboard tr:nth-child(even) td:nth-child(odd) {
+            background: #77cc77;
+        }
+
+        table.chessboard td {
+            width: 50px;
+            height: 50px;
+        }
+
+        table.chessboard tr td:first-child,
+        table.chessboard tr:last-child td,
+        table.chessboard tr:first-child td,
+        table.chessboard tr td:last-child {
+            background-color: brown !important;
+            color: #ffc7c7;
+            font-family: sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        table.chessboard tr td:first-child,
+        table.chessboard tr td:last-child {
+            width: 25px;
+        }
+        table.chessboard tr:first-child td,
+        table.chessboard tr:last-child td {
+            height: 25px;
+        }
+
+        .chart div {
+            height: 15px;
+            float: left;
+        }
+        .chart .win {
+            background-color: green;
+        }
+        .chart .draw {
+            background-color: blue;
+        }
+        .chart .loss {
+            background-color: red;
+        }
+
+        footer {
+            margin-top: 1em;
+            border-top: 1px solid #ccc;
+            padding-top: 1em;
+            color: #ccc;
+            width: 50%;
+        }
+
+        footer a {
+            color: #ccc;
+        }
+  </style>
+</head>
+<body>
+
+<p>{{moves}}</p>
+
+<table class="chessboard">
+  <tr><td></td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td></td></tr>
+  <tr><td>8</td><td>{{a8}}</td><td>{{b8}}</td><td>{{c8}}</td><td>{{d8}}</td><td>{{e8}}</td><td>{{f8}}</td><td>{{g8}}</td><td>{{h8}}</td><td>8</td></tr>
+  <tr><td>7</td><td>{{a7}}</td><td>{{b7}}</td><td>{{c7}}</td><td>{{d7}}</td><td>{{e7}}</td><td>{{f7}}</td><td>{{g7}}</td><td>{{h7}}</td><td>7</td></tr>
+  <tr><td>6</td><td>{{a6}}</td><td>{{b6}}</td><td>{{c6}}</td><td>{{d6}}</td><td>{{e6}}</td><td>{{f6}}</td><td>{{g6}}</td><td>{{h6}}</td><td>6</td></tr>
+  <tr><td>5</td><td>{{a5}}</td><td>{{b5}}</td><td>{{c5}}</td><td>{{d5}}</td><td>{{e5}}</td><td>{{f5}}</td><td>{{g5}}</td><td>{{h5}}</td><td>5</td></tr>
+  <tr><td>4</td><td>{{a4}}</td><td>{{b4}}</td><td>{{c4}}</td><td>{{d4}}</td><td>{{e4}}</td><td>{{f4}}</td><td>{{g4}}</td><td>{{h4}}</td><td>4</td></tr>
+  <tr><td>3</td><td>{{a3}}</td><td>{{b3}}</td><td>{{c3}}</td><td>{{d3}}</td><td>{{e3}}</td><td>{{f3}}</td><td>{{g3}}</td><td>{{h3}}</td><td>3</td></tr>
+  <tr><td>2</td><td>{{a2}}</td><td>{{b2}}</td><td>{{c2}}</td><td>{{d2}}</td><td>{{e2}}</td><td>{{f2}}</td><td>{{g2}}</td><td>{{h2}}</td><td>2</td></tr>
+  <tr><td>1</td><td>{{a1}}</td><td>{{b1}}</td><td>{{c1}}</td><td>{{d1}}</td><td>{{e1}}</td><td>{{f1}}</td><td>{{g1}}</td><td>{{h1}}</td><td>1</td></tr>
+  <tr><td></td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td></td></tr>
+</table>
+
+<p>{{fen}}</p>
+
+<table class="stats">
+  <thead>
+  <tr>
+    <th>Move</th>
+    <th>Games<br/>White + Black = Total</th>
+    <th colspan="2">Games as White<br/>Wins / Draws / Losses</th>
+    <th colspan="2">Games as Black<br/>Wins / Draws / Losses</th>
+  </tr>
+  </thead>
+  {{#stats}}
+    <tr>
+      <td><a href="/moves/{{moves}} {{move}}">{{move}}</a></td>
+      <td>{{whiteStats.total}} + {{blackStats.total}} = {{totalNumberOfGames}}</td>
+      <td>{{whiteStats.wins}} / {{whiteStats.draws}} / {{whiteStats.losses}}</td>
+      <td class="chart">
+        <div class="win" style="width: calc(100 * {{whiteStats.winPercentage}}px);"></div>
+        <div class="draw" style="width: calc(100 * {{whiteStats.drawPercentage}}px);"></div>
+        <div class="loss" style="width: calc(100 * {{whiteStats.lossPercentage}}px);"></div>
+      </td>
+      <td>{{blackStats.wins}} / {{blackStats.draws}} / {{blackStats.losses}}</td>
+      <td class="chart">
+        <div class="win" style="width: calc(100 * {{blackStats.winPercentage}}px);"></div>
+        <div class="draw" style="width: calc(100 * {{blackStats.drawPercentage}}px);"></div>
+        <div class="loss" style="width: calc(100 * {{blackStats.lossPercentage}}px);"></div>
+      </td>
+    </tr>
+  {{/stats}}
+</table>
+<footer>
+  {{numberOfGames}} games in memory. <br/>
+  <a href="/">Back to uploading</a>. <br/>
+  <a href="/moves/">Back to initial position</a>. <br/>
+</footer>
+</body>
+</html>
